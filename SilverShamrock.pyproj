@@ -14,6 +14,9 @@
     <RootNamespace>SilverShamrock</RootNamespace>
     <InterpreterId>{dbfae4bf-be50-400e-b4b0-6457d4d3a6e5}</InterpreterId>
     <InterpreterVersion>3.5</InterpreterVersion>
+    <IsWindowsApplication>True</IsWindowsApplication>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <EnableNativeCodeDebugging>True</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>

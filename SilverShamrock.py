@@ -37,56 +37,66 @@ class Halloween:
 
 class GUI:
     def __init__(self, root, halloween):
-        if getattr(sys, 'frozen', False):
-            icon = path.join(sys._MEIPASS, 'pumpkin.ico')
-        else:
-            icon = path.join(path.dirname(path.abspath(__file__)), 'pumpkin.ico')
         self.halloween = halloween
         self.root = root
-        self.root.iconbitmap(icon)
-        root.resizable(0,0)
-        root.title("Silver Shamrock")
-        root.columnconfigure(0, weight=1)
-        root.rowconfigure(0, weight=1)
-        self.mainframe = mainframe = Frame(root, bg="#FA8E0F")
-        mainframe.grid(column=0, row=0, sticky="NEWS")
-        mainframe.columnconfigure(0, weight=1)
-        mainframe.rowconfigure(0, weight=1)
-        self.days = days = StringVar()
-        headingFont = font.Font(
+        self.initialize()
+        self.loop()
+
+    def initialize(self):
+        self.days = StringVar()
+        self.initialize_window()
+        self.initialize_mainframe()
+
+    def initialize_mainframe(self):
+        self.mainframe = Frame(root, bg="#FA8E0F")
+        self.mainframe.grid(column=0, row=0, sticky="NEWS")
+        self.mainframe.columnconfigure(0, weight=1)
+        self.mainframe.rowconfigure(0, weight=1)
+        self.headingFont = font.Font(
             family="TkHeadingFont",
             size=32,
             weight="bold",
         )
-        label = Label(
-            mainframe,
-            textvariable=days,
+        self.label = Label(
+            self.mainframe,
+            textvariable=self.days,
             anchor="center",
-            font=headingFont,
+            font=self.headingFont,
             foreground="#9601D4",
             bg="#05CD1D"
         )
-        label.grid(column=0, row=0, sticky="NEWS")
-        for child in mainframe.winfo_children():
+        self.label.grid(column=0, row=0, sticky="NEWS")
+        for child in self.mainframe.winfo_children():
             child.grid_configure(padx=5, pady=5)
-        self.loop()
+
+    def initialize_window(self):
+        self.set_icon()
+        self.root.resizable(0,0)
+        self.root.title("Silver Shamrock")
+        self.root.columnconfigure(0, weight=1)
+        self.root.rowconfigure(0, weight=1)
+
+    def set_icon(self):
+        if getattr(sys, 'frozen', False):
+            icon = path.join(sys._MEIPASS, 'pumpkin.ico')
+        else:
+            icon = path.join(
+                path.dirname(path.abspath(__file__)),
+                'pumpkin.ico',
+            )
+        self.root.iconbitmap(icon)
 
     def loop(self):
         until = self.halloween.until
         days = until.days
         minutes, seconds = divmod(until.seconds, 60)
         hours, minutes = divmod(minutes, 60)
-        self.days.set(
-            "{} Days\n{} Hours\n{} Minutes\n{} Seconds\n\n'Til Halloween!".format(
-                days,
-                hours,
-                minutes,
-                seconds,
-            )
-        )
+        fmt = "{} Days\n{} Hours\n{} Minutes\n{} Seconds\n\n'Til Halloween!"
+        self.days.set(fmt.format(days, hours, minutes, seconds))
         self.root.after(1000, self.loop)
 
-h = Halloween()
-root = Tk()
-gui = GUI(root, h)
-root.mainloop()
+if __name__ == "__main__":
+    h = Halloween()
+    root = Tk()
+    gui = GUI(root, h)
+    root.mainloop()
